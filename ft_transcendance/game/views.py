@@ -120,31 +120,33 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import AvatarUploadForm
 
-# Vue pour le profil utilisateur avec possibilité d'uploader un avatar
 @login_required
 def profile(request):
+    # Charger les avatars disponibles
+    avatar_path = os.path.join(settings.MEDIA_ROOT, 'avatars')
+    avatars = [
+        'avatars/' + f for f in os.listdir(avatar_path)
+        if os.path.isfile(os.path.join(avatar_path, f)) and f != 'default_avatar.jpg'
+    ]
+
     if request.method == 'POST':
-        form = AvatarUploadForm(request.POST, request.FILES, instance=request.user)
-        if form.is_valid():
-            form.save()
-            return redirect('profile')  # Redirige vers la page de profil après l'upload
-    else:
-        form = AvatarUploadForm(instance=request.user)
+        # Récupérer l'avatar sélectionné et l'enregistrer
+        selected_avatar = request.POST.get('avatar')
+        if selected_avatar in avatars:
+            request.user.avatar = selected_avatar
+            request.user.save()
+            return JsonResponse({'status': 'success', 'avatar_url': request.user.avatar.url})
 
     context = {
-        'form': form,
-        'user': request.user,
+        'avatars': avatars,
+        'MEDIA_URL': settings.MEDIA_URL
     }
+
     return render(request, 'game/profile.html', context)
 
-# Tableau de bord utilisateur
 @login_required
 def dashboard(request):
-    user = request.user
-    context = {
-        'user': user,
-    }
-    return render(request, 'game/dashboard.html', context)
+    return render(request, 'game/dashboard.html')
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -183,7 +185,6 @@ import os
 
 @login_required
 def profile(request):
-    # Chemin vers les avatars disponibles (en excluant celui par défaut)
     avatar_path = os.path.join(settings.MEDIA_ROOT, 'avatars')
     avatars = [
         'avatars/' + f for f in os.listdir(avatar_path)
@@ -191,16 +192,25 @@ def profile(request):
     ]
 
     if request.method == 'POST':
-        # Récupérer le nom de l'avatar choisi par l'utilisateur
-        selected_avatar = request.POST.get('avatar')
-        if selected_avatar in avatars:
+        data = json.loads(request.body)
+        selected_avatar = data.get('avatar')
+
+        if selected_avatar and selected_avatar in avatars:
             request.user.avatar = selected_avatar
             request.user.save()
             return JsonResponse({'status': 'success', 'avatar_url': request.user.avatar.url})
 
     context = {
         'avatars': avatars,
-        'MEDIA_URL': settings.MEDIA_URL  # Passer MEDIA_URL au template
+        'MEDIA_URL': settings.MEDIA_URL
     }
 
     return render(request, 'game/profile.html', context)
+
+from django.http import JsonResponse
+from .models import Avatar  # Si vous avez un modèle pour les avatars
+
+def api_avatars(request):
+    avatars = Avatar.objects.all()
+    data = [{"name": avatar.name, "url": avatar.image.url} for avatar in avatars]
+    return JsonResponse(data, safe=False)

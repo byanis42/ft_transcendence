@@ -23,3 +23,12 @@ class Match(models.Model):
 
     def __str__(self):
         return f"{self.player1} vs {self.player2} on {self.match_date}"
+
+from django.db import models
+
+class Avatar(models.Model):
+    name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='avatars/')
+
+    def __str__(self):
+        return self.name

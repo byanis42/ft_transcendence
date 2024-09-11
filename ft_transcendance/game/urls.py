@@ -16,6 +16,7 @@ urlpatterns = [
 
 from django.urls import path
 from .views import login, callback
+from .views import api_avatars
 
 urlpatterns = [
     path('login/', views.login, name='login'),
@@ -24,4 +25,5 @@ urlpatterns = [
 	path('', views.index, name='index'),
 	path('dashboard/', views.dashboard, name='dashboard'),
 	path('profile/', views.profile, name='profile'),
+	path('api/avatars/', api_avatars, name='api_avatars'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
