@@ -1,13 +1,44 @@
 {% extends 'game/base.html' %}
 
 {% block content %}
-<div id="game-area" class="card bg-dark text-light mb-3">
-    <div class="card-body">
-        <h1>Bienvenue sur le tableau de bord</h1>
-        <p>Bonjour, {{ user.display_name }} !</p>
-        <button class="btn btn-success mt-3">Jouer</button>
-        <!-- Placeholder pour la future zone de jeu -->
-        <div id="pong-game" style="border: 1px solid #fff; height: 400px; margin-top: 20px;"></div>
+<div class="game-dashboard container">
+    <div class="card text-center bg-dark text-light mt-5">
+        <div class="card-header">
+            <h2>Bienvenue dans le tableau de bord du jeu Pong</h2>
+        </div>
+        <div class="card-body">
+            <p class="card-text">Préparez-vous à jouer à un jeu classique !</p>
+            <button id="launch-game" class="btn btn-success mt-3">Lancer le jeu</button>
+        </div>
     </div>
+
+    <!-- Fenêtre de choix des paramètres -->
+    <div id="game-settings" class="settings-popup card bg-dark text-light mt-3" style="display: none;">
+        <div class="card-header">
+            <h3>Choisir les paramètres du jeu</h3>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label for="ball-speed" class="form-label">Vitesse de la balle :</label>
+                <select id="ball-speed" class="form-select">
+                    <option value="3">Lent</option>
+                    <option value="5" selected>Moyen</option>
+                    <option value="8">Rapide</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="paddle-size" class="form-label">Taille des raquettes :</label>
+                <select id="paddle-size" class="form-select">
+                    <option value="60">Petite</option>
+                    <option value="100" selected>Moyenne</option>
+                    <option value="140">Grande</option>
+                </select>
+            </div>
+            <button id="start-game" class="btn btn-primary mt-3">Jouer</button>
+        </div>
+    </div>
+
+    <!-- Canvas pour le jeu Pong -->
+    <canvas id="pongCanvas" width="800" height="400" style="display:none;"></canvas>
 </div>
 {% endblock %}

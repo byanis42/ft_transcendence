@@ -122,7 +122,6 @@ from .forms import AvatarUploadForm
 
 @login_required
 def profile(request):
-    # Charger les avatars disponibles
     avatar_path = os.path.join(settings.MEDIA_ROOT, 'avatars')
     avatars = [
         'avatars/' + f for f in os.listdir(avatar_path)
@@ -130,19 +129,25 @@ def profile(request):
     ]
 
     if request.method == 'POST':
-        # Récupérer l'avatar sélectionné et l'enregistrer
-        selected_avatar = request.POST.get('avatar')
-        if selected_avatar in avatars:
+        data = json.loads(request.body)
+        selected_avatar = data.get('avatar')
+
+        if selected_avatar and selected_avatar in avatars:
             request.user.avatar = selected_avatar
             request.user.save()
-            return JsonResponse({'status': 'success', 'avatar_url': request.user.avatar.url})
+            return JsonResponse({
+                'status': 'success',
+                'new_avatar_url': request.user.avatar.url  # Envoi de l'URL du nouvel avatar
+            })
 
     context = {
         'avatars': avatars,
+        'selected_avatar': request.user.avatar,  # Pass the selected avatar to the template
         'MEDIA_URL': settings.MEDIA_URL
     }
 
     return render(request, 'game/profile.html', context)
+
 
 @login_required
 def dashboard(request):

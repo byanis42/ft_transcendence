@@ -1,19 +1,22 @@
 {% extends 'game/base.html' %}
 
 {% block content %}
-    <div class="container text-center mt-5">
-        <h1>Changer d'avatar</h1>
-        <div class="row mt-4">
-            <!-- Formulaire caché pour le CSRF -->
-            <form method="post" id="csrf-form">
-                {% csrf_token %}
-            </form>
-            <!-- Affichage des avatars -->
-            {% for avatar in avatars %}
-                <div class="col-2">
-                    <img src="{{ MEDIA_URL }}{{ avatar }}" class="avatar img-thumbnail selectable-avatar" data-avatar="{{ avatar }}" alt="Avatar">
-                </div>
-            {% endfor %}
-        </div>
+<div class="container text-center mt-5">
+    <h1>Changer d'avatar</h1>
+    <div class="row mt-4">
+        <!-- CSRF Form -->
+        <form method="post" id="csrf-form">
+            {% csrf_token %}
+        </form>
+
+        <!-- Avatar display -->
+        {% for avatar in avatars %}
+            <div class="col-2">
+                <img src="{{ MEDIA_URL }}{{ avatar }}"
+                     class="avatar img-thumbnail selectable-avatar {% if avatar == selected_avatar %}selected{% endif %}"
+                     data-avatar="{{ avatar }}" alt="Avatar">
+            </div>
+        {% endfor %}
     </div>
+</div>
 {% endblock %}
