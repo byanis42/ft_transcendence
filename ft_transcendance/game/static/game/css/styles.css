@@ -7,11 +7,37 @@ body {
     margin-bottom: 20px;
 }
 
+#chat-section {
+    padding: 20px;
+    height: 100%;
+}
+
+#player-info {
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #34495e;
+}
+
 .avatar {
     width: 100px;
     height: 100px;
     border-radius: 50%;
     object-fit: cover;
+    display: block;
+    margin: 0 auto;
+    cursor: pointer;  /* This enables the pointer cursor on hover */
+    transition: transform 0.2s, box-shadow 0.2s; /* Smooth transition for hover effect */
+}
+
+.avatar:hover {
+    transform: scale(1.1); /* Slight zoom effect on hover */
+    box-shadow: 0 0 15px rgba(0, 150, 255, 0.7); /* Add a glowing effect */
+}
+
+textarea.form-control {
+    background-color: #34495e;
+    color: white;
+    border: 1px solid #fff;
 }
 
 .img-thumbnail {
@@ -20,25 +46,14 @@ body {
     border: 1px solid #ddd;
 }
 
-button#save-avatar {
-    background-color: #3498db;
-    border: none;
-    padding: 10px 20px;
-    color: white;
+#pong-game {
+    background-color: #2ecc71;
+    height: 400px;
+    margin-top: 20px;
 }
 
-/* Styles pour la surbrillance de l'avatar sélectionné */
-.selectable-avatar {
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.selectable-avatar:hover {
-    transform: scale(1.1);
-}
-
+/* Additional Styles for Selected Avatar */
 .selectable-avatar.selected {
-    box-shadow: 0px 0px 10px 5px rgba(0, 150, 255, 0.7);
-    border-radius: 50%;
-    transform: scale(1.1);
+    border: 3px solid #007bff; /* Blue border around selected avatar */
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.8); /* Blue glow */
 }

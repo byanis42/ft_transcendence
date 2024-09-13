@@ -198,12 +198,17 @@ def profile(request):
         if selected_avatar and selected_avatar in avatars:
             request.user.avatar = selected_avatar
             request.user.save()
-            return JsonResponse({'status': 'success', 'avatar_url': request.user.avatar.url})
+            return JsonResponse({
+                'status': 'success',
+                'new_avatar_url': request.user.avatar.url  # Envoi de l'URL du nouvel avatar
+            })
 
     context = {
         'avatars': avatars,
         'MEDIA_URL': settings.MEDIA_URL
     }
+
+    return render(request, 'game/profile.html', context)
 
     return render(request, 'game/profile.html', context)
 

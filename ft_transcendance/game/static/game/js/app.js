@@ -1,17 +1,15 @@
+import { updateAvatar } from './playerInfo.js';  // Import the function to update the avatar
+
 // Function to load the Dashboard view
-function loadDashboard() {
+export function loadDashboard() {
     fetch('/dashboard/')
     .then(response => response.text())
     .then(html => {
-        // Extract only the content inside the block "content"
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
-
-        // Make sure #app exists before trying to update its innerHTML
         const contentElement = doc.querySelector('#app');
         if (contentElement) {
-            const content = contentElement.innerHTML;
-            document.getElementById('app').innerHTML = content;
+            document.getElementById('app').innerHTML = contentElement.innerHTML;
         } else {
             console.error('Element #app not found in the fetched document.');
         }
@@ -26,18 +24,15 @@ function loadProfile() {
     fetch('/profile/')
     .then(response => response.text())
     .then(html => {
-        // Extract only the content inside the block "content"
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
 
-        // Make sure #app exists before trying to update its innerHTML
         const contentElement = doc.querySelector('#app');
         if (contentElement) {
             const content = contentElement.innerHTML;
             document.getElementById('app').innerHTML = content;
 
-            // Setup avatar selection after profile view is loaded
-            setupAvatarSelection();
+            setupAvatarSelection();  // Set up avatar selection after loading profile
         } else {
             console.error('Element #app not found in the fetched document.');
         }
@@ -47,47 +42,17 @@ function loadProfile() {
     });
 }
 
-// Fonction pour mettre à jour l'avatar de l'utilisateur
-function updateAvatar(avatar) {
-    // Récupérer le token CSRF à partir du formulaire caché
-    const csrfToken = document.querySelector('#csrf-form [name=csrfmiddlewaretoken]').value;
-
-    fetch('/profile/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken, // Utilisation du token CSRF récupéré
-        },
-        body: JSON.stringify({
-            'avatar': avatar
-        })
-    }).then(response => response.json())
-      .then(data => {
-          if (data.status === 'success') {
-              console.log('Avatar mis à jour');
-              loadDashboard(); // Reload dashboard after avatar update to reflect changes
-          }
-      })
-      .catch(error => {
-          console.error('Error updating avatar:', error);
-      });
-}
-
-// Ajouter un événement de clic à chaque avatar
+// Function to handle avatar selection and apply visual effects
 function setupAvatarSelection() {
     const avatars = document.querySelectorAll('.selectable-avatar');
 
     avatars.forEach(avatar => {
         avatar.addEventListener('click', function() {
-            // Enlever la classe 'selected' de tous les avatars
             avatars.forEach(a => a.classList.remove('selected'));
-
-            // Ajouter la classe 'selected' à l'avatar cliqué
             this.classList.add('selected');
 
-            // Mettre à jour l'avatar de l'utilisateur
             const selectedAvatar = this.getAttribute('data-avatar');
-            updateAvatar(selectedAvatar);
+            updateAvatar(selectedAvatar);  // Call the function to update the avatar
         });
     });
 }
@@ -103,7 +68,7 @@ document.getElementById('change-avatar-link').addEventListener('click', function
     loadProfile();
 });
 
-// Optionally load the dashboard by default when the page is first loaded
+// Load the dashboard by default when the page is first loaded
 window.onload = function() {
-    loadDashboard(); // Load dashboard when the app starts
+    loadDashboard();
 };

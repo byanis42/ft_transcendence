@@ -1,11 +1,13 @@
 {% extends 'game/base.html' %}
+
 {% block content %}
-<div>
-    <h1 class="mb-4">Bienvenue sur le tableau de bord</h1>
-    <p class="welcome-text">Bonjour, {{ user.display_name }} !</p>
-    <div>
-        <img src="{{ user.avatar.url }}" alt="Avatar de {{ user.display_name }}" class="avatar img-thumbnail">
+<div id="game-area" class="card bg-dark text-light mb-3">
+    <div class="card-body">
+        <h1>Bienvenue sur le tableau de bord</h1>
+        <p>Bonjour, {{ user.display_name }} !</p>
+        <button class="btn btn-success mt-3">Jouer</button>
+        <!-- Placeholder pour la future zone de jeu -->
+        <div id="pong-game" style="border: 1px solid #fff; height: 400px; margin-top: 20px;"></div>
     </div>
-    <button class="btn btn-success mt-3">Jouer</button>
 </div>
 {% endblock %}
