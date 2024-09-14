@@ -105,6 +105,16 @@ textarea.form-control {
     width: 100%;
 }
 
+#score-container {
+    font-size: 24px;
+    color: white;
+}
+
+#score {
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+}
+
 /* Ajustements responsives */
 @media (max-width: 768px) {
     #chat-section, #player-info {

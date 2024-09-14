@@ -14,10 +14,8 @@ export function loadDashboard() {
         if (contentElement) {
             document.getElementById('app').innerHTML = contentElement.innerHTML;
 
-            // Lier le bouton de démarrage du jeu à la fonction startPongGame
-            document.getElementById('start-game-btn').addEventListener('click', function() {
-                startPongGame();  // Démarrer le jeu Pong
-            });
+            // Bind the game launching button
+            bindGameButtons();  // Nouvelle fonction pour binder les boutons après chaque vue chargée
         } else {
             console.error('Élément #app non trouvé dans le document récupéré.');
         }
@@ -66,6 +64,30 @@ function setupAvatarSelection() {
     });
 }
 
+// Function to bind the buttons related to the Pong game
+function bindGameButtons() {
+    // Bind the launch-game button to show settings
+    document.getElementById("launch-game").addEventListener("click", function () {
+        // Afficher la fenêtre des paramètres du jeu
+        document.getElementById("game-settings").style.display = "block";
+        document.getElementById("pongCanvas").style.display = "none";  // Masquer le canvas du jeu
+    });
+
+    // Bind the start-game button to start the game with selected settings
+    document.getElementById("start-game").addEventListener("click", function () {
+        // Récupérer les paramètres sélectionnés
+        const ballSpeed = parseInt(document.getElementById("ball-speed").value);
+        const paddleSize = parseInt(document.getElementById("paddle-size").value);
+
+        // Masquer la fenêtre des paramètres
+        document.getElementById("game-settings").style.display = "none";
+        document.getElementById("pongCanvas").style.display = "block";  // Afficher le canvas du jeu
+
+        // Démarrer le jeu avec les paramètres choisis
+        startPongGame(ballSpeed, paddleSize);
+    });
+}
+
 // Event listeners for the navbar links
 document.getElementById('dashboard-link').addEventListener('click', function(e) {
     e.preventDefault();
@@ -77,55 +99,7 @@ document.getElementById('change-avatar-link').addEventListener('click', function
     loadProfile();
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("dashboard-link").addEventListener("click", function (e) {
-        e.preventDefault();
-        loadDashboard();
-    });
-
-    document.getElementById("change-avatar-link").addEventListener("click", function (e) {
-        e.preventDefault();
-        loadProfile();
-    });
-
-    document.getElementById("launch-game").addEventListener("click", function () {
-        // Afficher la fenêtre des paramètres du jeu
-        document.getElementById("game-settings").style.display = "block";
-        document.getElementById("pongCanvas").style.display = "none";  // Masquer le canvas du jeu
-    });
-
-    document.getElementById("start-game").addEventListener("click", function () {
-        // Récupérer les paramètres sélectionnés
-        const ballSpeed = parseInt(document.getElementById("ball-speed").value);
-        const paddleSize = parseInt(document.getElementById("paddle-size").value);
-
-        // Masquer la fenêtre des paramètres
-        document.getElementById("game-settings").style.display = "none";
-        document.getElementById("pongCanvas").style.display = "block";  // Afficher le canvas du jeu
-
-        // Démarrer le jeu avec les paramètres choisis
-        startPongGame(ballSpeed, paddleSize);
-    });
-});
-
 // Load the dashboard by default when the page is first loaded
 window.onload = function () {
-    document.getElementById("launch-game").addEventListener("click", function () {
-        // Afficher la fenêtre des paramètres du jeu
-        document.getElementById("game-settings").style.display = "block";
-        document.getElementById("pongCanvas").style.display = "none";  // Masquer le canvas du jeu
-    });
-
-    document.getElementById("start-game").addEventListener("click", function () {
-        // Récupérer les paramètres sélectionnés
-        const ballSpeed = parseInt(document.getElementById("ball-speed").value);
-        const paddleSize = parseInt(document.getElementById("paddle-size").value);
-
-        // Masquer la fenêtre des paramètres
-        document.getElementById("game-settings").style.display = "none";
-        document.getElementById("pongCanvas").style.display = "block";  // Afficher le canvas du jeu
-
-        // Démarrer le jeu avec les paramètres choisis
-        startPongGame(ballSpeed, paddleSize);
-    });
+    loadDashboard();
 };
